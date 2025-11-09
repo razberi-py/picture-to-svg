@@ -1,0 +1,31 @@
+* { box-sizing: border-box; }
+body { margin: 0; font-family: system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif; color: #222; }
+.toolbar { display: flex; flex-wrap: wrap; gap: 12px; padding: 10px 12px; border-bottom: 1px solid #ddd; background: #fafafa; position: sticky; top: 0; z-index: 10; }
+.tool-group { display: flex; align-items: center; gap: 8px; }
+.tool { padding: 6px 10px; border: 1px solid #ccc; background: white; border-radius: 6px; cursor: pointer; }
+.tool.active { background: #2d7ef7; color: white; border-color: #2d7ef7; }
+.upload-label input[type="file"] { display: inline-block; }
+
+.workspace { display: grid; grid-template-columns: 1fr 300px; height: calc(100vh - 60px); }
+.canvas-wrapper { display: flex; align-items: center; justify-content: center; background: #fff; }
+#editor { border: 1px solid #ddd; background: white; }
+.sidepanel { border-left: 1px solid #ddd; padding: 12px; overflow-y: auto; background: #fcfcfc; }
+.prop-row { display: grid; grid-template-columns: 60px 1fr; gap: 6px; align-items: center; margin-bottom: 8px; }
+#properties input, #properties textarea { width: 100%; }
+
+/* Selection outline */
+.selection-outline { pointer-events: none; stroke: #2d7ef7; stroke-dasharray: 4 3; fill: none; }
+
+/* Modal */
+.modal.hidden { display: none; }
+.modal { position: fixed; inset: 0; background: rgba(0,0,0,0.35); display: grid; place-items: center; z-index: 20; }
+.modal-content { background: #fff; border-radius: 10px; padding: 16px; min-width: 340px; box-shadow: 0 10px 30px rgba(0,0,0,0.2); }
+.modal-row { margin-bottom: 10px; }
+.modal-actions { display: flex; gap: 8px; justify-content: flex-end; margin-top: 12px; }
+.modal-content select, .modal-content input { width: 100%; padding: 6px; }
+
+/* Status and raster preview */
+.status { margin-left: 8px; color: #666; font-size: 0.9em; }
+.raster-preview { display: grid; grid-template-columns: 1fr; gap: 8px; }
+#rasterPreview { max-width: 100%; border: 1px solid #ddd; border-radius: 6px; }
+.raster-meta { color: #555; font-size: 0.9em; }

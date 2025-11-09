@@ -1,0 +1,136 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>SVG Editor</title>
+    <link rel="stylesheet" href="styles.css" />
+  </head>
+  <body>
+    <header class="toolbar">
+      <div class="tool-group">
+        <button class="tool" data-mode="select" id="modeSelect" title="Select/Move">Select</button>
+        <button class="tool" data-mode="rect" id="modeRect" title="Draw Rectangle">Rect</button>
+        <button class="tool" data-mode="circle" id="modeCircle" title="Draw Circle">Circle</button>
+        <button class="tool" data-mode="path" id="modePath" title="Freehand Path">Path</button>
+      </div>
+      <div class="tool-group">
+        <label>Fill <input type="color" id="fillColor" value="#66ccff" /></label>
+        <label>Stroke <input type="color" id="strokeColor" value="#333333" /></label>
+        <label>Width <input type="number" id="strokeWidth" value="2" min="0" step="0.5" /></label>
+        <button id="bringToFront" title="Bring selected to front">Bring Front</button>
+        <button id="sendToBack" title="Send selected to back">Send Back</button>
+      </div>
+      <div class="tool-group">
+        <button id="openExport">Export…</button>
+      </div>
+      <div class="tool-group">
+        <label class="upload-label">
+          Import PNG/JPEG
+          <input type="file" id="rasterInput" accept="image/png, image/jpeg" />
+        </label>
+        <label>
+          Preset
+          <select id="vectorPreset">
+            <option value="default">default</option>
+            <option value="posterized1">posterized1</option>
+            <option value="posterized2" selected>posterized2</option>
+            <option value="posterized3">posterized3</option>
+            <option value="curvy">curvy</option>
+            <option value="sharp">sharp</option>
+            <option value="detailed">detailed</option>
+            <option value="smoothed">smoothed</option>
+            <option value="grayscale">grayscale</option>
+          </select>
+        </label>
+        <label>
+          Sharpness
+          <input type="range" id="sharpnessScale" min="1" max="100" value="80" />
+          <span id="sharpnessValue">80</span>
+        </label>
+        <button id="vectorizeBtn">Vectorize to SVG</button>
+        <span id="vectorStatus" class="status">No image selected</span>
+      </div>
+    </header>
+
+    <main class="workspace">
+      <div class="canvas-wrapper">
+        <svg id="editor" width="1000" height="700" viewBox="0 0 1000 700">
+          <defs>
+            <pattern id="grid" width="20" height="20" patternUnits="userSpaceOnUse">
+              <path d="M 20 0 L 0 0 0 20" fill="none" stroke="#e0e0e0" stroke-width="1" />
+            </pattern>
+          </defs>
+          <rect width="100%" height="100%" fill="url(#grid)" />
+          <!-- Drawing layer -->
+          <g id="drawingLayer"></g>
+        </svg>
+      </div>
+      <aside class="sidepanel">
+        <h3>Properties</h3>
+        <div id="properties">
+          <div class="prop-row"><span>Type:</span> <span id="propType">None</span></div>
+          <div class="prop-row"><span>X:</span> <input type="number" id="propX" /></div>
+          <div class="prop-row"><span>Y:</span> <input type="number" id="propY" /></div>
+          <div class="prop-row"><span>W:</span> <input type="number" id="propW" /></div>
+          <div class="prop-row"><span>H:</span> <input type="number" id="propH" /></div>
+          <div class="prop-row"><span>R:</span> <input type="number" id="propR" /></div>
+          <div class="prop-row"><span>Path D:</span> <textarea id="propD" rows="3"></textarea></div>
+          <button id="deleteSelected">Delete Selected</button>
+        </div>
+        <hr />
+        <h3>Raster Preview</h3>
+        <div class="raster-preview">
+          <img id="rasterPreview" alt="Raster preview" />
+          <div class="raster-meta">
+            <div><strong>Size:</strong> <span id="rasterMeta"></span></div>
+          </div>
+        </div>
+      </aside>
+    </main>
+
+    <canvas id="rasterCanvas" width="1000" height="700" style="display:none"></canvas>
+
+    <!-- Export Modal -->
+    <div id="exportModal" class="modal hidden" aria-hidden="true">
+      <div class="modal-content" role="dialog" aria-modal="true" aria-labelledby="exportTitle">
+        <h3 id="exportTitle">Export Settings</h3>
+        <div class="modal-row">
+          <label>Format
+            <select id="exportFormat">
+              <option value="svg" selected>SVG</option>
+              <option value="txt">TXT</option>
+              <option value="html">HTML</option>
+            </select>
+          </label>
+        </div>
+        <div class="modal-row">
+          <label>Size
+            <select id="exportSize">
+              <option value="canvas" selected>Canvas size</option>
+              <option value="fit">Fit to content</option>
+            </select>
+          </label>
+        </div>
+        <div class="modal-row">
+          <label>Padding
+            <input type="number" id="exportPadding" value="0" min="0" step="1" />
+          </label>
+        </div>
+        <div class="modal-row">
+          <label>Filename
+            <input type="text" id="exportFilename" value="drawing" />
+          </label>
+        </div>
+        <div class="modal-actions">
+          <button id="exportConfirm">Download</button>
+          <button id="exportCancel">Cancel</button>
+        </div>
+      </div>
+    </div>
+
+    <script src="app.js"></script>
+    <!-- ImageTracer.js CDN: raster to SVG conversion -->
+    <script src="https://cdn.jsdelivr.net/npm/imagetracerjs@1.2.6/imagetracer_v1.2.6.js"></script>
+  </body>
+  </html>
